@@ -56,10 +56,7 @@ class ProfileTab extends StatelessWidget {
         const Divider(),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            'Gambar Favorit (dari Database Hive)',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          child: Text('Favorit', style: Theme.of(context).textTheme.titleLarge),
         ),
 
         // --- MENAMPILKAN DATA DARI HIVE (Syarat #3) ---

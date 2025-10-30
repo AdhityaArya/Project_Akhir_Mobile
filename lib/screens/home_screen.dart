@@ -1,7 +1,8 @@
+import 'package:astroview/models/neo_event.dart';
+import 'package:astroview/screens/tabs/neo_events_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '/screens/tabs/apod_tab.dart';
-import '/screens/tabs/search_tab.dart';
+import '/screens/tabs/home_tab.dart';
 import '/screens/tabs/location_tab.dart';
 import '/screens/tabs/profile_tab.dart';
 
@@ -14,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
   void _logout(BuildContext context) async {
     final storage = const FlutterSecureStorage();
     await storage.delete(key: 'auth_token');
@@ -30,10 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   static const List<String> _widgetTitles = <String>[
-    'Astronomy Picture of the Day',
-    'Search NASA Library',
-    'Observatory Locations',
-    'Profile',
+    'Beranda',
+    'Event',
+    'Lokasi',
+    'Profil',
   ];
 
   List<Widget>? _buildAppBarActions() {
@@ -52,17 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final Object? arguments = ModalRoute.of(context)!.settings.arguments;
-    String username;
-    if (arguments != null && arguments is String) {
-      username = arguments;
-    } else {
-      username = "Guest";
-    }
+    String username =
+        (arguments != null && arguments is String) ? arguments : "Guest";
 
-    // Daftar 4 halaman tab kita
     final List<Widget> _widgetOptions = <Widget>[
-      const ApodTab(),
-      const SearchTab(),
+      const HomeTab(),
+      const NeoEventsTab(),
       const LocationsTab(),
       ProfileTab(username: username),
     ];
@@ -81,18 +76,25 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: _buildAppBarActions(),
       ),
-
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
-
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.today), label: 'APOD'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Cari'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.track_changes),
+            label: 'Event',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.map_outlined),
             label: 'Lokasi',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: 'Profil',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,

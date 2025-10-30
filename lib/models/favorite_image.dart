@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 
 part 'favorite_image.g.dart';
 
-@HiveType(typeId: 0) // 'Cetakan' untuk Hive
+@HiveType(typeId: 0)
 class FavoriteImage extends HiveObject {
   @HiveField(0)
   final String title;
@@ -15,7 +15,7 @@ class FavoriteImage extends HiveObject {
   final String explanation;
 
   @HiveField(3)
-  final String date; // Gunakan 'date' sebagai ID unik
+  final String date;
 
   FavoriteImage({
     required this.title,

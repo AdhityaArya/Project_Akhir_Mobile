@@ -9,6 +9,8 @@ import '/models/favorite_image.dart';
 import '/screens/home_screen.dart';
 import '/screens/load_screen.dart';
 import '/screens/login_screen.dart';
+import '/models/user_model.dart';
+import '/screens/register_screen.dart';
 import '/services/notification_service.dart';
 
 void main() async {
@@ -23,7 +25,8 @@ void main() async {
 
   // Inisialisasi Hive (Database Lokal - Syarat #3)
   await Hive.initFlutter();
-  Hive.registerAdapter(FavoriteImageAdapter()); // Daftarkan 'cetakan'
+  Hive.registerAdapter(FavoriteImageAdapter());
+  Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox<FavoriteImage>('favorites'); // Buka 'kotak' database
 
   // Inisialisasi Notifikasi Lokal (Syarat #7)
@@ -51,6 +54,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LoadScreen(),
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
+        '/register': (context) => const RegisterScreen(),
       },
     );
   }

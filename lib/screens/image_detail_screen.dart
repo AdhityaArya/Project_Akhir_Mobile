@@ -1,14 +1,15 @@
 // lib/screens/image_detail_screen.dart
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart'; // Import Hive Flutter
 // (Pastikan nama 'astroview_app' sesuai dengan nama proyek Anda)
 import '/models/favorite_image.dart';
 
-class ImageDetailScreen extends StatelessWidget {
+// 1. Ubah menjadi StatefulWidget
+class ImageDetailScreen extends StatefulWidget {
   final String title;
   final String url;
   final String explanation;
-  final String date;
+  final String date; // Kita gunakan 'date' sebagai ID unik
 
   const ImageDetailScreen({
     super.key,
@@ -18,57 +19,110 @@ class ImageDetailScreen extends StatelessWidget {
     required this.date,
   });
 
-  // --- FUNGSI UNTUK MENYIMPAN KE DATABASE (Syarat #3) ---
-  void _saveToFavorites(BuildContext context) {
-    // Buka 'kotak' database
-    final box = Hive.box<FavoriteImage>('favorites');
+  @override
+  State<ImageDetailScreen> createState() => _ImageDetailScreenState();
+}
 
-    // Kita gunakan 'date' sebagai key (ID) unik
-    // Ini untuk mencegah data duplikat
-    if (box.containsKey(date)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gambar ini sudah ada di favorit.')),
-      );
-      return;
+class _ImageDetailScreenState extends State<ImageDetailScreen> {
+  // 2. Tambahkan variabel state untuk melacak status favorit
+  bool _isFavorited = false;
+  // Variabel untuk mengakses kotak Hive
+  late Box<FavoriteImage> _favoritesBox;
+
+  @override
+  void initState() {
+    super.initState();
+    // 3. Buka kotak Hive saat halaman diinisialisasi
+    _favoritesBox = Hive.box<FavoriteImage>('favorites');
+    // 4. Cek apakah gambar ini sudah ada di favorit
+    _checkIfFavorited();
+  }
+
+  // Fungsi untuk mengecek status favorit awal
+  void _checkIfFavorited() {
+    // Cek apakah 'key' (yaitu tanggal) ada di dalam kotak Hive
+    setState(() {
+      _isFavorited = _favoritesBox.containsKey(widget.date);
+    });
+  }
+
+  // --- FUNGSI UNTUK MENGELOLA FAVORIT (Like/Unlike) ---
+  void _toggleFavorite() {
+    if (_isFavorited) {
+      // JIKA SUDAH FAVORIT -> Hapus dari favorit
+      _removeFromFavorites();
+    } else {
+      // JIKA BELUM FAVORIT -> Tambahkan ke favorit
+      _saveToFavorites();
     }
+    // Update status _isFavorited setelah aksi
+    setState(() {
+      _isFavorited = !_isFavorited;
+    });
+  }
 
+  // Fungsi untuk MENYIMPAN ke Database Hive
+  void _saveToFavorites() {
     // Buat objek data baru
     final newFavorite = FavoriteImage(
-      title: title,
-      url: url,
-      explanation: explanation,
-      date: date,
+      title: widget.title,
+      url: widget.url,
+      explanation: widget.explanation,
+      date: widget.date,
     );
-
     // Simpan ke database menggunakan 'date' sebagai key
-    box.put(date, newFavorite);
+    _favoritesBox.put(widget.date, newFavorite);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Berhasil disimpan ke favorit!')),
+      const SnackBar(
+        content: Text('Ditambahkan ke favorit!'),
+        duration: Duration(seconds: 1),
+      ),
     );
   }
+
+  // Fungsi untuk MENGHAPUS dari Database Hive
+  void _removeFromFavorites() {
+    // Hapus dari database menggunakan 'date' sebagai key
+    _favoritesBox.delete(widget.date);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Dihapus dari favorit.'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+  }
+  // --- AKHIR FUNGSI FAVORIT ---
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(widget.title),
         actions: [
-          // --- TOMBOL FAVORIT (Syarat #7 - Pemilihan) ---
+          // --- TOMBOL FAVORIT (Like/Unlike) ---
           IconButton(
-            icon: const Icon(Icons.favorite_outline),
-            tooltip: 'Simpan ke Favorit',
-            onPressed: () => _saveToFavorites(context),
+            // 5. Ganti ikon berdasarkan state _isFavorited
+            icon: Icon(
+              _isFavorited ? Icons.favorite : Icons.favorite_outline,
+              // Beri warna merah jika sudah favorit
+              color: _isFavorited ? Colors.redAccent : null,
+            ),
+            tooltip: _isFavorited ? 'Hapus dari Favorit' : 'Simpan ke Favorit',
+            // 6. Panggil fungsi _toggleFavorite saat ditekan
+            onPressed: _toggleFavorite,
           ),
         ],
       ),
+      // Body tetap sama
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(
-              url,
+              widget.url,
               fit: BoxFit.cover,
               loadingBuilder: (context, child, progress) {
                 return progress == null
@@ -77,10 +131,16 @@ class ImageDetailScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            Text(title, style: Theme.of(context).textTheme.headlineMedium),
-            Text(date, style: Theme.of(context).textTheme.titleSmall),
+            Text(
+              widget.title,
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            Text(widget.date, style: Theme.of(context).textTheme.titleSmall),
             const SizedBox(height: 16),
-            Text(explanation, style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              widget.explanation,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
           ],
         ),
       ),
