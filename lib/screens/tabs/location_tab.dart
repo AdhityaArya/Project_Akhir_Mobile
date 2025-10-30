@@ -1,5 +1,3 @@
-// lib/screens/tabs/locations_tab.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -18,7 +16,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Observatorium Bosscha",
       "description":
-          "Observatorium astronomi tertua di Indonesia, dikelola oleh ITB.",
+          "Observatorium Bosscha adalah obervatorium astronomi modern pertama di Asia Tenggara yang terletak di Lembang, Jawa Barat, dan dikelola oleh Institut Teknologi Bandung (ITB)",
       "latitude": -6.8249,
       "longitude": 107.6186,
       "event_time_utc": "2026-09-07T19:00:00Z",
@@ -27,7 +25,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Planetarium Jakarta",
       "description":
-          "Planetarium dan observatorium publik di Taman Ismail Marzuki, Jakarta.",
+          "Planetarium Jakarta adalah pusat edukasi astronomi yang terletak di Kompleks Taman Ismail Marzuki dan didirikan pada tahun 1964. Gedung ini berfungsi sebagai teater bintang yang mensimulasikan susunan bintang dan benda langit di bawah kubah setengah lingkaran, serta memiliki fasilitas seperti ruang pameran dan observatorium untuk melihat objek langit secara langsung.",
       "latitude": -6.1920,
       "longitude": 106.8400,
       "event_time_utc": "2026-10-20T14:00:00Z",
@@ -36,7 +34,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Observatorium Nasional TIMAU",
       "description":
-          "Observatorium nasional baru Indonesia yang terletak di Kupang, NTT.",
+          "Observatorium Nasional (Obnas) Timau adalah observatorium astronomi terbesar di Asia Tenggara yang berlokasi di Gunung Timau, Kabupaten Kupang, Nusa Tenggara Timur. Objek tersebut memiliki teleskop optik 3,8 meter dan dilengkapi berbagai fasilitas modern untuk mendukung penelitian antariksa, pendidikan, dan pengembangan ilmu pengetahuan astronomi. Lokasinya yang tinggi di bebas polusi cahaya, serta berada di dekat ekuator, menjadikannya ideal untuk mengamati langit selatan dan bahkan dapat mengisi celah pengamatan antara observatorium di belahan bumi utara dan selatan.",
       "latitude": -9.9984,
       "longitude": 123.7712,
       "event_time_utc": "2026-11-15T18:00:00Z",
@@ -45,7 +43,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Observatorium Mauna Kea (Hawaii)",
       "description":
-          "Kumpulan teleskop besar di puncak gunung Mauna Kea, Hawaii, USA.",
+          "Observatorium Mauna Kea (MKO) adalah kompleks fasilitas penelitian astronomi independen yang terletak di puncak Mauna Kea di Pulau Hawaii, Amerika Serikat. Lokasinya sangat ideal karena ketinggiannya (sekitar 4.207 m), minim polusi cahaya, dan udara yang kering, jernih, serta stabil di atas lapisan awan, yang menjadikannya salah satu tempat pengamatan terbaik di dunia.",
       "latitude": 19.8206,
       "longitude": -155.4681,
       "event_time_utc": "2026-11-05T08:00:00Z",
@@ -54,7 +52,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Very Large Telescope (VLT)",
       "description":
-          "Observatorium ESO di Gurun Atacama, Chile, salah satu yang tercanggih.",
+          "Very Large Telescope (VLT) adalah fasilitas astronomi optik terkemuka yang dioperasikan oleh European Southern Observatory (ESO) di Gurun Atacama, Chile. Fasilitas ini terdiri dari empat teleskop optik besar (Teleskop Unit) dengan cermin utama berdiameter 8,2 meter dan empat Teleskop Bantu bergerak berdiameter 1,8 meter.",
       "latitude": -24.6272,
       "longitude": -70.4042,
       "event_time_utc": "2027-01-10T02:00:00Z",
@@ -63,7 +61,7 @@ class _LocationsTabState extends State<LocationsTab> {
     {
       "name": "Observatorium Griffith (Los Angeles)",
       "description":
-          "Observatorium publik ikonik dengan pemandangan kota Los Angeles, USA.",
+          "Observatorium Griffith adalah fasilitas publik gratis di Los Angeles, terletak di Gunung Hollywood, yang berfungsi sebagai observatorium, planetarium, dan ruang pameran bertema luar angkasa. Fasilitas ini menawarkan pemandangan kota Los Angeles, Hollywood Sign, dan Samudra Pasifik dari lokasinya di puncak gunung. Observatorium ini dibangun menggunakan warisan dari Griffith J. Griffith, yang juga menyumbangkan lahan untuk taman di sekitarnya",
       "latitude": 34.1184,
       "longitude": -118.3004,
       "event_time_utc": "2027-02-14T04:00:00Z",
@@ -298,9 +296,6 @@ class _LocationsTabState extends State<LocationsTab> {
   Widget _buildObservatoryDetailCard(Map<String, dynamic> observatory) {
     String name = observatory['name'] ?? 'Nama Tidak Diketahui';
     String description = observatory['description'] ?? 'Tidak ada deskripsi.';
-    DateTime eventTimeUtc =
-        DateTime.tryParse(observatory['event_time_utc'] ?? '')?.toUtc() ??
-            DateTime.now().toUtc();
     double ticketPriceUsd =
         (observatory['ticket_price_usd'] as num?)?.toDouble() ?? 0.0;
 

@@ -1,5 +1,6 @@
 // lib/main.dart
 
+import 'package:astroview/screens/saran_kesan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
@@ -14,25 +15,18 @@ import '/screens/register_screen.dart';
 import '/services/notification_service.dart';
 
 void main() async {
-  // Pastikan semua binding Flutter siap
   WidgetsFlutterBinding.ensureInitialized();
-  // Inisialisasi format tanggal Indonesia (untuk Konverter Waktu)
   await initializeDateFormatting('id_ID', null);
 
-  // Inisialisasi Timezone (untuk Notifikasi)
   tzdata.initializeTimeZones();
-  tz.setLocalLocation(tz.getLocation('Asia/Jakarta')); // Set zona waktu lokal
+  tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
 
-  // Inisialisasi Hive (Database Lokal - Syarat #3)
   await Hive.initFlutter();
   Hive.registerAdapter(FavoriteImageAdapter());
   Hive.registerAdapter(UserModelAdapter());
-  await Hive.openBox<FavoriteImage>('favorites'); // Buka 'kotak' database
+  await Hive.openBox<FavoriteImage>('favorites');
 
-  // Inisialisasi Notifikasi Lokal (Syarat #7)
-  // await NotificationService().initNotifications();
-  // Jadwalkan notifikasi APOD harian
-  //NotificationService().scheduleDailyApodNotification();
+  await NotificationService().initNotifications();
 
   runApp(const MyApp());
 }
@@ -43,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'AstroView',
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -55,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/home': (context) => const HomeScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/saran_kesan': (context) => const SaranKesanScreen(),
       },
     );
   }

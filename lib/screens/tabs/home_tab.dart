@@ -1,12 +1,10 @@
-// lib/screens/tabs/home_tab.dart
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart'; // Impor Hive Flutter
-// Ganti 'astroview_app' dengan nama proyek Anda jika berbeda
+import 'package:hive_flutter/hive_flutter.dart';
 import '/models/nasa_image.dart';
 import '/models/apod_image.dart';
-import '/models/favorite_image.dart'; // Impor model Favorit
+import '/models/favorite_image.dart';
 import '/services/api_service.dart';
-import '/screens/image_detail_screen.dart'; // Impor halaman detail
+import '/screens/image_detail_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -16,61 +14,44 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
-  // Instance ApiService untuk memanggil API
   final ApiService _apiService = ApiService();
-  // Controller untuk mengelola teks di search bar
   final TextEditingController _searchController = TextEditingController();
-
-  // State (variabel internal) untuk menyimpan daftar gambar yang akan ditampilkan
   List<NasaImage> _displayImages = [];
-  // State untuk menandai apakah aplikasi sedang memuat data dari API
   bool _isLoading = false;
-  // State untuk menandai apakah yang sedang ditampilkan adalah hasil pencarian
   bool _isShowingSearchResults = false;
-  // Kata kunci default yang digunakan untuk memuat rekomendasi awal
-  final String _defaultQuery =
-      "NASA"; // Anda bisa ganti ini (misal: "Mars", "galaxy")
+  final String _defaultQuery = "NASA";
 
   @override
   void initState() {
     super.initState();
-    // Saat halaman ini pertama kali dibuka, panggil fungsi untuk memuat rekomendasi
     _loadRecommendations();
   }
 
   @override
   void dispose() {
-    // Penting: Hapus controller saat widget tidak lagi digunakan
     _searchController.dispose();
     super.dispose();
   }
 
-  // --- FUNGSI UNTUK MEMUAT REKOMENDASI AWAL ---
   Future<void> _loadRecommendations() async {
-    // Update state untuk menampilkan loading dan menandai bukan mode search
     setState(() {
       _isLoading = true;
-      _isShowingSearchResults = false; // Kembali ke mode rekomendasi
-      _searchController.clear(); // Hapus teks di search bar
+      _isShowingSearchResults = false;
+      _searchController.clear();
     });
     try {
-      // Panggil API untuk mencari gambar berdasarkan query default
       final results = await _apiService.searchImages(_defaultQuery);
-      // Update state dengan hasil dari API dan matikan loading
-      // Cek 'mounted' sebelum setState, best practice setelah await
       if (mounted) {
         setState(() {
-          _displayImages = results; // Tampilkan hasil rekomendasi
+          _displayImages = results;
           _isLoading = false;
         });
       }
     } catch (e) {
-      // Jika terjadi error saat memanggil API
       if (mounted) {
         setState(() {
-          _isLoading = false; // Matikan loading
+          _isLoading = false;
         });
-        // Tampilkan pesan error kepada pengguna
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error memuat rekomendasi: ${e.toString()}')),
         );
@@ -78,7 +59,6 @@ class _HomeTabState extends State<HomeTab> {
     }
   }
 
-  // --- FUNGSI UNTUK MELAKUKAN PENCARIAN ---
   Future<void> _performSearch(String query) async {
     // Jika query (teks pencarian) kosong
     if (query.isEmpty) {
@@ -141,7 +121,7 @@ class _HomeTabState extends State<HomeTab> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          // Gunakan StatefulBuilder agar dialog bisa punya state sendiri (untuk tombol like)
+          // StatefulBuilder agar dialog bisa punya state sendiri (untuk tombol like)
           return StatefulBuilder(
             builder: (context, setDialogState) {
               // Cek status favorit awal untuk APOD ini (berdasarkan tanggal)

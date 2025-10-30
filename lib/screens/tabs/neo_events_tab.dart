@@ -1,4 +1,5 @@
 // lib/screens/tabs/neo_events_tab.dart
+import 'package:astroview/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // Ganti 'astroview_app' dengan nama proyek Anda jika berbeda
@@ -15,6 +16,7 @@ class NeoEventsTab extends StatefulWidget {
 class _NeoEventsTabState extends State<NeoEventsTab> {
   // Instance ApiService untuk memanggil API
   final ApiService _apiService = ApiService();
+  final NotificationService _notificationService = NotificationService();
   // Future untuk menampung hasil panggilan API
   late Future<List<NeoEvent>> _futureNeoEvents;
 
@@ -23,6 +25,22 @@ class _NeoEventsTabState extends State<NeoEventsTab> {
     super.initState();
     // Panggil API NEO saat tab ini pertama kali dibuka
     _futureNeoEvents = _apiService.getUpcomingNeos();
+  }
+
+  void _scheduleNotification(NeoEvent event) {
+    final int notificationId = event.name.hashCode & 0x7FFFFFFF;
+
+    _notificationService.scheduleEventNotification(
+      id: notificationId,
+      eventName: event.name,
+      eventTimeUtc: event.closeApproachTimeUtc,
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Pengingat untuk ${event.name} telah diatur'),
+      backgroundColor: Colors.green,
+      duration: const Duration(seconds: 2),
+    ));
   }
 
   @override
@@ -92,12 +110,19 @@ class _NeoEventsTabState extends State<NeoEventsTab> {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white, // Warna teks nama
-                                  ),
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                               overflow: TextOverflow
                                   .ellipsis, // Tambah '...' jika terlalu panjang
                             ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.notification_add_outlined),
+                            color: Colors.indigoAccent,
+                            tooltip: 'Atur pengingat 1 jam sebelum event',
+                            onPressed: () {
+                              _scheduleNotification(event);
+                            },
                           ),
                           // Tampilkan ikon peringatan HANYA jika berbahaya
                           Padding(

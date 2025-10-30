@@ -18,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _authService = AuthService();
   // State untuk loading
   bool _isLoading = false;
+  bool _isPasswordVisible = false;
 
   // --- FUNGSI UNTUK REGISTRASI ---
   void _register() async {
@@ -126,12 +127,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
             // Field Password Baru
             TextField(
               controller: _passwordController,
-              obscureText: true, // Sembunyikan password
+              obscureText: !_isPasswordVisible, // Sembunyikan password
               decoration: InputDecoration(
                 labelText: 'Password Baru',
                 prefixIcon: const Icon(Icons.lock_person_outlined),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
+                ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility // Ikon mata terbuka
+                        : Icons.visibility_off, // Ikon mata tertutup
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
                 ),
               ),
             ),

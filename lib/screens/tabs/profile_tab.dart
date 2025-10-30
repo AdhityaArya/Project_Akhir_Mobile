@@ -1,8 +1,5 @@
-// lib/screens/tabs/profile_tab.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// (Pastikan nama 'astroview_app' sesuai dengan nama proyek Anda)
 import '/models/favorite_image.dart';
 import '/screens/image_detail_screen.dart';
 
@@ -10,53 +7,25 @@ class ProfileTab extends StatelessWidget {
   final String username;
   const ProfileTab({super.key, required this.username});
 
-  void _logout(BuildContext context) async {
-    final storage = const FlutterSecureStorage();
-    await storage.delete(key: 'auth_token');
-    if (context.mounted) {
-      Navigator.of(context).pushReplacementNamed('/login');
-    }
-  }
-
-  void _showSaranKesan(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Saran dan Kesan Mata Kuliah'),
-        content: const Text(
-          'Aplikasi AstroView ini dibuat untuk memenuhi Tugas Akhir Pemrograman Aplikasi Mobile. Aplikasi ini mengintegrasikan API (NASA), LBS (Google Maps), Database (Hive), Notifikasi, dan Konverter Waktu/Mata Ulang.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Tutup'),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.zero,
       children: [
         UserAccountsDrawerHeader(
           accountName: Text(username),
           accountEmail: Text("$username@astroview.com"),
           currentAccountPicture: const CircleAvatar(
-            child: Icon(Icons.person, size: 50),
-          ),
+              backgroundImage: AssetImage('/assets/bintang.jpg')),
           decoration: const BoxDecoration(color: Colors.indigo),
         ),
         ListTile(
           leading: const Icon(Icons.edit_note),
           title: const Text('Saran dan Kesan Mata Kuliah'),
-          onTap: () => _showSaranKesan(context),
-        ),
-        const Divider(),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text('Favorit', style: Theme.of(context).textTheme.titleLarge),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          onTap: () {
+            Navigator.pushNamed(context, '/saran_kesan');
+          },
         ),
 
         // --- MENAMPILKAN DATA DARI HIVE (Syarat #3) ---

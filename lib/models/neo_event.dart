@@ -1,11 +1,8 @@
-// lib/models/neo_event.dart
-
-// Cetakan untuk data Near Earth Object (Asteroid Mendekat)
 class NeoEvent {
-  final String name; // Nama asteroid (cth: (2024 XD4))
-  final DateTime closeApproachTimeUtc; // Waktu terdekat dengan bumi (UTC)
-  final double missDistanceKm; // Jarak terdekat (km) - Opsional
-  final double relativeVelocityKps; // Kecepatan relatif (km/s) - Opsional
+  final String name;
+  final DateTime closeApproachTimeUtc;
+  final double missDistanceKm;
+  final double relativeVelocityKps;
   final double estimatedDiameterMinMeters;
   final double estimatedDiameterMaxMeters;
   final bool isPotentiallyHazardous;

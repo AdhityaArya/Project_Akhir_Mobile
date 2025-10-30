@@ -1,10 +1,11 @@
-import 'package:astroview/models/neo_event.dart';
-import 'package:astroview/screens/tabs/neo_events_tab.dart';
+// lib/screens/home_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '/screens/tabs/home_tab.dart';
-import '/screens/tabs/location_tab.dart';
-import '/screens/tabs/profile_tab.dart';
+// Ganti 'astroview' dengan nama proyek Anda
+import 'package:astroview/screens/tabs/home_tab.dart';
+import 'package:astroview/screens/tabs/neo_events_tab.dart';
+import 'package:astroview/screens/tabs/location_tab.dart';
+import 'package:astroview/screens/tabs/profile_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,9 +16,47 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+
+  // --- INI BAGIAN PENTING (MEMBACA DATA) ---
+  final _storage = const FlutterSecureStorage();
+  String _username = "Guest"; // Nilai default
+
+  @override
+  void initState() {
+    super.initState();
+    print('HomeScreen [DEBUG]: initState() dipanggil.');
+    _loadUsername(); // Panggil fungsi untuk memuat username
+  }
+
+  // Fungsi untuk membaca username dari secure storage
+  void _loadUsername() async {
+    print('HomeScreen [DEBUG]: _loadUsername() mulai...');
+    // Baca 'username' yang kita simpan saat login
+    String? storedUsername = await _storage.read(key: 'username');
+
+    if (storedUsername == null) {
+      print(
+          'HomeScreen [DEBUG]: _storage.read(key: "username") mengembalikan NULL.');
+    } else {
+      print('HomeScreen [DEBUG]: Berhasil membaca username: "$storedUsername"');
+    }
+
+    if (mounted) {
+      setState(() {
+        _username =
+            storedUsername ?? "Guest"; // Set state dengan data yang dibaca
+      });
+    }
+  }
+  // --- AKHIR BAGIAN PENTING ---
+
+  // Fungsi Logout (pastikan 'username' juga dihapus)
   void _logout(BuildContext context) async {
-    final storage = const FlutterSecureStorage();
-    await storage.delete(key: 'auth_token');
+    print(
+        'HomeScreen [DEBUG]: Logout dipanggil, menghapus token dan username...');
+    await _storage.delete(key: 'auth_token');
+    await _storage.delete(key: 'username'); // Hapus username
+
     if (context.mounted) {
       Navigator.of(context).pushReplacementNamed('/login');
     }
@@ -29,13 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  static const List<String> _widgetTitles = <String>[
+  static const List<String> _widgetTitles = [
     'Beranda',
     'Event',
     'Lokasi',
-    'Profil',
+    'Profil'
   ];
-
   List<Widget>? _buildAppBarActions() {
     if (_selectedIndex == 3) {
       return [
@@ -51,15 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Object? arguments = ModalRoute.of(context)!.settings.arguments;
-    String username =
-        (arguments != null && arguments is String) ? arguments : "Guest";
+    // KODE YANG MEMBACA 'arguments' SUDAH DIHAPUS
 
+    // Daftar widget (menggunakan _username dari state)
     final List<Widget> _widgetOptions = <Widget>[
       const HomeTab(),
       const NeoEventsTab(),
       const LocationsTab(),
-      ProfileTab(username: username),
+      ProfileTab(username: _username), // Kirim _username dari state
     ];
 
     return Scaffold(
@@ -80,21 +117,13 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
+              icon: Icon(Icons.home_outlined), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.track_changes),
-            label: 'Event',
-          ),
+              icon: Icon(Icons.track_changes), label: 'Event'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
-            label: 'Lokasi',
-          ),
+              icon: Icon(Icons.map_outlined), label: 'Lokasi'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profil',
-          ),
+              icon: Icon(Icons.person_outline), label: 'Profil'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.white,

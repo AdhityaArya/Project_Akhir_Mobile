@@ -1,4 +1,3 @@
-// lib/models/favorite_image.dart
 import 'package:hive/hive.dart';
 
 part 'favorite_image.g.dart';

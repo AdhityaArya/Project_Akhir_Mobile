@@ -41,9 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   geolocator: ^14.0.2
 
-  # --- Paket Opsional (Dikomentari Sementara) ---
-  # Untuk notifikasi lokal (fitur TA #7, hindari error desugaring)
-  # flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.1.2
 
 # Daftar package yang hanya dibutuhkan saat development (pengembangan)
 dev_dependencies:
