@@ -47,90 +47,68 @@ class ApiService {
               item['data'] != null &&
               item['data'].isNotEmpty &&
               item['data'][0]['title'] != null) {
-            // Jika data aman, buat objek NasaImage dan tambahkan ke list
             images.add(NasaImage(
               title: item['data'][0]['title'],
               description:
                   item['data'][0]['description'] ?? 'Tidak ada deskripsi.',
-              imageUrl: item['links'][0]['href'], // URL gambar thumbnail
-              // Ambil tanggal pembuatan jika ada, jika tidak 'N/A'
+              imageUrl: item['links'][0]['href'],
               date: item['data'][0]['date_created'] ?? 'N/A',
             ));
           }
         }
-        return images; // Kembalikan list hasil pencarian
+        return images;
       } else {
-        // Jika gagal, lempar error
         throw Exception('Gagal mencari gambar. Status: ${response.statusCode}');
       }
     } catch (e) {
-      // Tangkap error jaringan
       print('Error searchImages: $e');
       throw Exception('Gagal terhubung ke server pencarian NASA.');
     }
   }
 
-  // --- FUNGSI 3: MENGAMBIL ASTEROID MENDEKAT (NEO) ---
-  // Memenuhi Syarat TA #4 (API) & #6 (Data Waktu Konverter)
   Future<List<NeoEvent>> getUpcomingNeos() async {
-    // Tentukan tanggal mulai (hari ini) dan tanggal akhir (7 hari dari sekarang)
     final today = DateTime.now();
     final endDate = today.add(const Duration(days: 7));
-    // Format tanggal menjadi 'YYYY-MM-DD' sesuai permintaan API
     final formatter = DateFormat('yyyy-MM-dd');
     final startDateStr = formatter.format(today);
     final endDateStr = formatter.format(endDate);
 
-    // Buat URL API NEO dengan rentang tanggal dan API key
     final url =
         '$_neoUrl?start_date=$startDateStr&end_date=$endDateStr&api_key=$_apiKey';
-    print('Memanggil API NEO: $url'); // Log untuk debugging
+    print('Memanggil API NEO: $url');
 
     try {
-      final response = await http.get(Uri.parse(url)); // Lakukan panggilan GET
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        // Decode JSON response
         final Map<String, dynamic> data = json.decode(response.body);
-        // Data NEO dikelompokkan berdasarkan tanggal ('near_earth_objects')
         final Map<String, dynamic> neoDataByDate =
             data['near_earth_objects'] ?? {};
-        List<NeoEvent> events = []; // List kosong untuk hasil
+        List<NeoEvent> events = [];
 
-        // Loop melalui setiap tanggal dalam data NEO
         neoDataByDate.forEach((date, neoList) {
-          // Loop melalui setiap asteroid (neo) dalam tanggal tersebut
           for (var neo in neoList) {
-            // Ambil data pendekatan terdekat ('close_approach_data')
             if (neo['close_approach_data'] != null &&
                 neo['close_approach_data'].isNotEmpty) {
-              // Ambil data pendekatan pertama (biasanya yang terdekat)
               final approach = neo['close_approach_data'][0];
-              // Ambil string waktu pendekatan penuh
               final String? timeString = approach['close_approach_date_full'];
-              DateTime? approachTimeUtc; // Variabel untuk menyimpan waktu UTC
+              DateTime? approachTimeUtc;
 
-              // Coba parse string waktu menjadi objek DateTime UTC
               if (timeString != null) {
                 try {
-                  // Format umum dari API: "YYYY-MMM-DD HH:MM" (cth: "2025-Oct-29 14:35")
                   final parsedDate = DateFormat('yyyy-MMM-d HH:mm', 'en_US')
                       .parseUtc(timeString);
                   approachTimeUtc = parsedDate;
                 } catch (e) {
-                  // Tangkap error jika format tanggal/waktu berbeda dari ekspektasi
                   print("Gagal parse waktu NEO: $timeString, Error: $e");
                 }
               }
 
-              // Jika waktu berhasil diparse
               if (approachTimeUtc != null) {
-                // Ambil data ukuran (diameter) dari JSON
                 double minDiameter = 0.0;
                 double maxDiameter = 0.0;
                 if (neo['estimated_diameter'] != null &&
                     neo['estimated_diameter']['meters'] != null) {
-                  // Konversi dari 'num' ke 'double' dengan aman
                   minDiameter = (neo['estimated_diameter']['meters']
                               ['estimated_diameter_min'] as num?)
                           ?.toDouble() ??
@@ -140,15 +118,12 @@ class ApiService {
                           ?.toDouble() ??
                       0.0;
                 }
-                // Ambil status potensi bahaya dari JSON
                 bool isHazardous =
                     neo['is_potentially_hazardous_asteroid'] ?? false;
 
-                // Buat objek NeoEvent dan tambahkan ke list hasil
                 events.add(NeoEvent(
                   name: neo['name'] ?? 'Asteroid Tidak Dikenal',
-                  closeApproachTimeUtc: approachTimeUtc, // Waktu UTC
-                  // Ambil data jarak dan kecepatan (opsional, dengan fallback 0.0)
+                  closeApproachTimeUtc: approachTimeUtc,
                   missDistanceKm: double.tryParse(
                           approach['miss_distance']?['kilometers'] ?? '0.0') ??
                       0.0,
@@ -157,7 +132,6 @@ class ApiService {
                                   ?['kilometers_per_second'] ??
                               '0.0') ??
                       0.0,
-                  // Masukkan data baru (ukuran dan bahaya)
                   estimatedDiameterMinMeters: minDiameter,
                   estimatedDiameterMaxMeters: maxDiameter,
                   isPotentiallyHazardous: isHazardous,
@@ -166,19 +140,16 @@ class ApiService {
             }
           }
         });
-        // Urutkan daftar event berdasarkan waktu terdekat
         events.sort(
             (a, b) => a.closeApproachTimeUtc.compareTo(b.closeApproachTimeUtc));
-        return events; // Kembalikan list event yang sudah diurutkan
+        return events;
       } else {
-        // Jika API mengembalikan error
         throw Exception(
             'Gagal memuat data NEO. Status: ${response.statusCode}');
       }
     } catch (e) {
-      // Tangkap error jaringan atau parsing
       print("Error getUpcomingNeos: $e");
       throw Exception('Gagal terhubung atau memproses data server NEO.');
     }
   }
-} // Akhir class ApiService
+}

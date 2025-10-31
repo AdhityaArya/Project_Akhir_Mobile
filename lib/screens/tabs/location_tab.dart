@@ -19,7 +19,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Observatorium Bosscha adalah obervatorium astronomi modern pertama di Asia Tenggara yang terletak di Lembang, Jawa Barat, dan dikelola oleh Institut Teknologi Bandung (ITB)",
       "latitude": -6.8249,
       "longitude": 107.6186,
-      "event_time_utc": "2026-09-07T19:00:00Z",
       "ticket_price_usd": 3.0
     },
     {
@@ -28,7 +27,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Planetarium Jakarta adalah pusat edukasi astronomi yang terletak di Kompleks Taman Ismail Marzuki dan didirikan pada tahun 1964. Gedung ini berfungsi sebagai teater bintang yang mensimulasikan susunan bintang dan benda langit di bawah kubah setengah lingkaran, serta memiliki fasilitas seperti ruang pameran dan observatorium untuk melihat objek langit secara langsung.",
       "latitude": -6.1920,
       "longitude": 106.8400,
-      "event_time_utc": "2026-10-20T14:00:00Z",
       "ticket_price_usd": 1.0
     },
     {
@@ -37,7 +35,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Observatorium Nasional (Obnas) Timau adalah observatorium astronomi terbesar di Asia Tenggara yang berlokasi di Gunung Timau, Kabupaten Kupang, Nusa Tenggara Timur. Objek tersebut memiliki teleskop optik 3,8 meter dan dilengkapi berbagai fasilitas modern untuk mendukung penelitian antariksa, pendidikan, dan pengembangan ilmu pengetahuan astronomi. Lokasinya yang tinggi di bebas polusi cahaya, serta berada di dekat ekuator, menjadikannya ideal untuk mengamati langit selatan dan bahkan dapat mengisi celah pengamatan antara observatorium di belahan bumi utara dan selatan.",
       "latitude": -9.9984,
       "longitude": 123.7712,
-      "event_time_utc": "2026-11-15T18:00:00Z",
       "ticket_price_usd": 5.0
     },
     {
@@ -46,7 +43,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Observatorium Mauna Kea (MKO) adalah kompleks fasilitas penelitian astronomi independen yang terletak di puncak Mauna Kea di Pulau Hawaii, Amerika Serikat. Lokasinya sangat ideal karena ketinggiannya (sekitar 4.207 m), minim polusi cahaya, dan udara yang kering, jernih, serta stabil di atas lapisan awan, yang menjadikannya salah satu tempat pengamatan terbaik di dunia.",
       "latitude": 19.8206,
       "longitude": -155.4681,
-      "event_time_utc": "2026-11-05T08:00:00Z",
       "ticket_price_usd": 0.0
     },
     {
@@ -55,7 +51,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Very Large Telescope (VLT) adalah fasilitas astronomi optik terkemuka yang dioperasikan oleh European Southern Observatory (ESO) di Gurun Atacama, Chile. Fasilitas ini terdiri dari empat teleskop optik besar (Teleskop Unit) dengan cermin utama berdiameter 8,2 meter dan empat Teleskop Bantu bergerak berdiameter 1,8 meter.",
       "latitude": -24.6272,
       "longitude": -70.4042,
-      "event_time_utc": "2027-01-10T02:00:00Z",
       "ticket_price_usd": 0.0
     },
     {
@@ -64,7 +59,6 @@ class _LocationsTabState extends State<LocationsTab> {
           "Observatorium Griffith adalah fasilitas publik gratis di Los Angeles, terletak di Gunung Hollywood, yang berfungsi sebagai observatorium, planetarium, dan ruang pameran bertema luar angkasa. Fasilitas ini menawarkan pemandangan kota Los Angeles, Hollywood Sign, dan Samudra Pasifik dari lokasinya di puncak gunung. Observatorium ini dibangun menggunakan warisan dari Griffith J. Griffith, yang juga menyumbangkan lahan untuk taman di sekitarnya",
       "latitude": 34.1184,
       "longitude": -118.3004,
-      "event_time_utc": "2027-02-14T04:00:00Z",
       "ticket_price_usd": 10.0
     }
   ];
@@ -373,7 +367,7 @@ class _LocationsTabState extends State<LocationsTab> {
               Icon(Icons.attach_money, color: Colors.green[400], size: 20),
               const SizedBox(width: 8),
               Text(
-                'Estimasi Biaya Tiket',
+                'Biaya Tiket',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -382,8 +376,6 @@ class _LocationsTabState extends State<LocationsTab> {
             ],
           ),
           const SizedBox(height: 4),
-          Text('(Harga perkiraan)',
-              style: TextStyle(fontSize: 13, color: Colors.grey[500])),
           const Divider(height: 24, color: Colors.grey),
           _buildCurrencyRow('🇺🇸', 'USD', formatUSD.format(priceUsd)),
           _buildCurrencyRow(

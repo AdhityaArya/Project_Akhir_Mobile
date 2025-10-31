@@ -1,5 +1,3 @@
-// lib/main.dart
-
 import 'package:astroview/screens/saran_kesan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';

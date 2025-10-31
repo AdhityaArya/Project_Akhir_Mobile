@@ -20,7 +20,7 @@ class SaranKesanScreen extends StatelessWidget {
                     size: 80, color: Colors.indigoAccent),
                 SizedBox(height: 24),
                 Text(
-                  'Aplikasi AstroView ini dibuat untuk memenuhi Tugas Akhir Pemrograman Aplikasi Mobile. Aplikasi ini mengintegrasikan API (NASA), LBS (OpenStreetMap), Database (Hive), Notifikasi, Konverter Waktu/Mata Uang, dan Login Dinamis Terenkripsi.',
+                  'Mata kuliah ini adalah salah satu yang paling banyak prateknya. Kami belajar teori sekaligus langsung praktek secara bersamaan untuk membuat aplikasi yang bisa dijalankan di smartphone. Kami jadi paham konsep-konsep penting dalam pengembangan aplikasi, seperti state management, navigasi antar halaman, dan bahkan penyimpanan data lokal',
                   style: TextStyle(fontSize: 17, height: 1.5),
                   textAlign: TextAlign.center,
                 )

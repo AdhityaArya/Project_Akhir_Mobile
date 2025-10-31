@@ -1,6 +1,4 @@
-// lib/screens/register_screen.dart
 import 'package:flutter/material.dart';
-// Ganti 'astroview' dengan nama proyek Anda jika berbeda
 import 'package:astroview/services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -11,18 +9,13 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  // Controller untuk mengambil teks
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  // Instance AuthService untuk memanggil fungsi register
   final AuthService _authService = AuthService();
-  // State untuk loading
   bool _isLoading = false;
   bool _isPasswordVisible = false;
 
-  // --- FUNGSI UNTUK REGISTRASI ---
   void _register() async {
-    // Validasi sederhana: pastikan tidak kosong
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -30,41 +23,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: Colors.orangeAccent,
         ),
       );
-      return; // Hentikan fungsi jika kosong
+      return;
     }
 
-    // Mulai loading
     setState(() {
       _isLoading = true;
     });
 
-    // Panggil fungsi register dari AuthService (yang menyimpan ke Hive)
     bool success = await _authService.register(
       _usernameController.text,
       _passwordController.text,
     );
 
-    // Hentikan loading
     setState(() {
       _isLoading = false;
     });
 
-    // Cek hasil registrasi
     if (mounted) {
       if (success) {
-        // JIKA BERHASIL:
-        // Beri pesan sukses dan kembali ke halaman Login
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Registrasi Berhasil! Silakan Login.'),
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.of(context)
-            .pop(); // 'pop' = kembali ke layar sebelumnya (Login)
+        Navigator.of(context).pop();
       } else {
-        // JIKA GAGAL (username sudah ada):
-        // Tampilkan pesan error
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Registrasi Gagal! Username sudah dipakai.'),
@@ -74,44 +58,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     }
   }
-  // --- AKHIR FUNGSI REGISTRASI ---
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // AppBar agar pengguna bisa kembali ke Login secara manual
       appBar: AppBar(
         title: const Text('Registrasi Akun Baru'),
-        backgroundColor: Colors.transparent, // Transparan
-        elevation: 0, // Hilangkan bayangan
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(32.0),
         child: Column(
-          // Posisikan konten di tengah
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Beri jarak dari AppBar
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-
-            // Ikon
             Icon(
               Icons.person_add_alt_1,
               size: 80,
               color: Colors.indigoAccent,
             ),
             const SizedBox(height: 24),
-
-            // Judul
             const Text(
               'Buat Akun Baru',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
-
-            // Field Username Baru
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -123,11 +97,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             const SizedBox(height: 16),
-
-            // Field Password Baru
             TextField(
               controller: _passwordController,
-              obscureText: !_isPasswordVisible, // Sembunyikan password
+              obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                 labelText: 'Password Baru',
                 prefixIcon: const Icon(Icons.lock_person_outlined),
@@ -137,8 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     _isPasswordVisible
-                        ? Icons.visibility // Ikon mata terbuka
-                        : Icons.visibility_off, // Ikon mata tertutup
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                   ),
                   onPressed: () {
                     setState(() {
@@ -149,10 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             const SizedBox(height: 32),
-
-            // Tombol Daftar
             ElevatedButton(
-              // Nonaktifkan tombol saat sedang loading
               onPressed: _isLoading ? null : _register,
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 16),
@@ -163,14 +132,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
               child: _isLoading
-                  // Tampilkan loading spinner jika sedang proses
                   ? const SizedBox(
                       height: 24,
                       width: 24,
                       child: CircularProgressIndicator(
                           color: Colors.white, strokeWidth: 3),
                     )
-                  // Tampilkan teks jika tidak loading
                   : const Text(
                       'DAFTAR',
                       style:

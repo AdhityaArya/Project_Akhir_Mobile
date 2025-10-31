@@ -17,21 +17,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  // --- INI BAGIAN PENTING (MEMBACA DATA) ---
   final _storage = const FlutterSecureStorage();
-  String _username = "Guest"; // Nilai default
+  String _username = "Guest";
 
   @override
   void initState() {
     super.initState();
     print('HomeScreen [DEBUG]: initState() dipanggil.');
-    _loadUsername(); // Panggil fungsi untuk memuat username
+    _loadUsername();
   }
 
-  // Fungsi untuk membaca username dari secure storage
   void _loadUsername() async {
     print('HomeScreen [DEBUG]: _loadUsername() mulai...');
-    // Baca 'username' yang kita simpan saat login
     String? storedUsername = await _storage.read(key: 'username');
 
     if (storedUsername == null) {
@@ -43,19 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (mounted) {
       setState(() {
-        _username =
-            storedUsername ?? "Guest"; // Set state dengan data yang dibaca
+        _username = storedUsername ?? "Guest";
       });
     }
   }
-  // --- AKHIR BAGIAN PENTING ---
 
-  // Fungsi Logout (pastikan 'username' juga dihapus)
   void _logout(BuildContext context) async {
     print(
         'HomeScreen [DEBUG]: Logout dipanggil, menghapus token dan username...');
     await _storage.delete(key: 'auth_token');
-    await _storage.delete(key: 'username'); // Hapus username
+    await _storage.delete(key: 'username');
 
     if (context.mounted) {
       Navigator.of(context).pushReplacementNamed('/login');
@@ -89,14 +83,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // KODE YANG MEMBACA 'arguments' SUDAH DIHAPUS
-
-    // Daftar widget (menggunakan _username dari state)
     final List<Widget> _widgetOptions = <Widget>[
       const HomeTab(),
       const NeoEventsTab(),
       const LocationsTab(),
-      ProfileTab(username: _username), // Kirim _username dari state
+      ProfileTab(username: _username),
     ];
 
     return Scaffold(

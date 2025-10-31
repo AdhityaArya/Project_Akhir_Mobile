@@ -1,70 +1,46 @@
-# Nama proyek Anda
 name: astroview
-# Deskripsi singkat proyek
-description: "A Flutter project to explore NASA's astronomy pictures and data."
-# Mencegah publikasi tidak sengaja ke pub.dev
-publish_to: 'none'
+description: "A new Flutter project."
+publish_to: 'none' 
 
-# Versi aplikasi Anda
 version: 1.0.0+1
 
-# Versi minimum Dart SDK yang dibutuhkan
 environment:
-  sdk: '>=3.3.3 <4.0.0' # Sesuaikan jika versi Flutter Anda berbeda
+  sdk: '>=3.3.3 <4.0.0'
 
-# Daftar package eksternal yang dibutuhkan oleh proyek Anda
 dependencies:
-  # Fondasi Flutter itu sendiri
+  # Fondasi Flutter
   flutter:
     sdk: flutter
-
-  # --- Paket Utama untuk Fitur ---
-  # Untuk melakukan panggilan API (NASA, dll.)
+  
+  # --- Paket-Paket Fitur Anda ---
   http: ^1.2.1
-  # Untuk format tanggal, waktu, dan mata uang (Konverter)
   intl: ^0.19.0
-  # Untuk menyimpan token login secara aman (Login & Session)
-  flutter_secure_storage: ^9.2.4 # Versi terbaru saat ini
-  # Untuk database lokal di HP (Menyimpan Favorit)
-  crypto:  ^3.0.3 
+  flutter_secure_storage: ^9.2.4
+  crypto: ^3.0.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  # Untuk mendapatkan path direktori penyimpanan (dibutuhkan Hive)
   path_provider: ^2.1.3
-  # Untuk menampilkan peta OpenStreetMap (LBS)
   flutter_map: ^6.1.0
-  # Untuk tipe data Latitude/Longitude (dibutuhkan flutter_map)
   latlong2: ^0.9.1
-  # Untuk zona waktu (dibutuhkan jika notifikasi diaktifkan lagi)
-  timezone: ^0.9.4
-  # Untuk ikon gaya iOS (biasanya sudah ada)
-  cupertino_icons: ^1.0.8
   geolocator: ^14.0.2
-
   flutter_local_notifications: ^17.1.2
+  timezone: ^0.9.4
+  cupertino_icons: ^1.0.8
 
-# Daftar package yang hanya dibutuhkan saat development (pengembangan)
 dev_dependencies:
-  # Untuk testing widget Flutter
   flutter_test:
     sdk: flutter
 
-  # Aturan analisis kode untuk menjaga kualitas kode
-  flutter_lints: ^5.0.0 # Versi terbaru saat ini
-  # Untuk men-generate kode adaptor Hive secara otomatis
+  flutter_lints: ^5.0.0
   hive_generator: ^2.0.1
-  # Untuk menjalankan proses code generation (seperti hive_generator)
   build_runner: ^2.4.9
 
 # Bagian konfigurasi khusus untuk Flutter
 flutter:
 
-  # Mengaktifkan penggunaan ikon dan komponen Material Design
+  # Mengaktifkan ikon Material Design
   uses-material-design: true
+
+  # Mendaftarkan folder assets
   assets:
     - assets/
-
-  # Mendaftarkan folder 'assets' (jika Anda memutuskan menggunakannya lagi nanti)
-  # Jika tidak pakai file JSON lokal, Anda bisa hapus bagian 'assets:' ini
-  # assets:
-  #   - assets/

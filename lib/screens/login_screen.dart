@@ -17,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   bool _isLoading = false;
 
-  // --- FUNGSI LOGIN DINAMIS ---
   void _login() async {
     setState(() {
       _isLoading = true;
@@ -34,11 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (mounted) {
       if (success) {
-        // JIKA BERHASIL:
-        // Pindah ke /home TANPA MENGIRIM ARGUMENTS
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
-        // JIKA GAGAL:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('LOGIN GAGAL, PERIKSA KEMBALI USERNAME DAN PASSWORD'),
@@ -48,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     }
   }
-  // --- AKHIR FUNGSI LOGIN DINAMIS ---
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Logo/Ikon
               CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.indigoAccent.withOpacity(0.2),
@@ -75,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 24.0),
-              // Teks Judul
               const Text(
                 'Welcome to AstroView',
                 textAlign: TextAlign.center,
@@ -88,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextStyle(fontSize: 16, color: Colors.grey[400]),
               ),
               const SizedBox(height: 40),
-              // Field Username
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
@@ -100,7 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Field Password
               TextField(
                 controller: _passwordController,
                 obscureText: !_isPasswordVisible,
@@ -125,7 +116,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Tombol Login
               ElevatedButton(
                 onPressed: _isLoading ? null : _login,
                 style: ElevatedButton.styleFrom(
@@ -147,7 +137,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 16),
-              // Tombol Register
               TextButton(
                 onPressed: _isLoading
                     ? null
